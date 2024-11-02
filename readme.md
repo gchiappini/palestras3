@@ -2,13 +2,12 @@
 
 * [SOBRE](#sobre)
 * [MAPA](#mapa)
-* [PROBLEMAS](#problemas)
 * [CREDITOS](#creditos)
 </br>
 
 ## SOBRE
 
-Site agregador dos eventos realizados por todos os gerúndios do projeto Acolher — tanto showcase da programação como repositório de eventos passados, e suas gravações.
+Site agregador dos eventos realizados por todos os gerúndios do projeto Acolher.
 
 ## MAPA
 
@@ -35,14 +34,6 @@ Site agregador dos eventos realizados por todos os gerúndios do projeto Acolher
 ├── index
 └── readme
 ```
-
-## PROBLEMAS
-
-### A lista do filtro está vazia
-A linha `populateComboBox(container);` foi removida do final @ js/cardInfo
-
-### "Uncaught TypeError: tags.join is not a function"
-Um parâmetro está ausente em `generateEvent()` @ js/cardInfo
 
 ## CREDITOS
 
