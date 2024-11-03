@@ -3,14 +3,6 @@ const headerCarousel = document.getElementById("carousel");
 const list = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
 let intervalId = null;
 let currentIndex = 0;
-let shuffledList = shuffleArray([...list]);
-
-const switchText = () => {
-	if (currentIndex === shuffledList.length) {
-		currentIndex = 0; // Reset index to start with the first item
-	}
-	headerCarousel.textContent = shuffledList[currentIndex++];
-};
 
 const shuffleArray = (array) => {
 	for (let i = array.length - 1; i > 0; i--) {
@@ -18,6 +10,15 @@ const shuffleArray = (array) => {
 		[array[i], array[j]] = [array[j], array[i]]; // Swap elements
 	}
 	return array;
+};
+
+let shuffledList = shuffleArray([...list]);
+
+const switchText = () => {
+	if (currentIndex === shuffledList.length) {
+		currentIndex = 0; // Reset index to start with the first item
+	}
+	headerCarousel.textContent = shuffledList[currentIndex++];
 };
 
 const viewportCheck = () => {
