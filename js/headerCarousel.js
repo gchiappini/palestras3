@@ -1,16 +1,15 @@
 // At large viewports, switch subheading from a list, making sure it's shuffled and goes through all before repeating
 const headerCarousel = document.getElementById("carousel");
-const gerundios = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
+const list = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
 let intervalId = null;
 let currentIndex = 0;
-let shuffledGerundios = shuffleArray([...gerundios]);
+let shuffledList = shuffleArray([...list]);
 
 const switchText = () => {
-	if (currentIndex === shuffledGerundios.length) {
-		shuffledGerundios = shuffleArray([...gerundios]);
-		currentIndex = 0;
+	if (currentIndex === shuffledList.length) {
+		currentIndex = 0; // Reset index to start with the first item
 	}
-	headerCarousel.textContent = shuffledGerundios[currentIndex++];
+	headerCarousel.textContent = shuffledList[currentIndex++];
 };
 
 const shuffleArray = (array) => {
@@ -29,11 +28,13 @@ const viewportCheck = () => {
 	} else {
 		clearInterval(intervalId);
 		intervalId = null;
-		headerCarousel.textContent = gerundios[0]; // Reset to first item
+		headerCarousel.textContent = list[0]; // Reset to first item
+		currentIndex = 0; // Reset index for mobile view
 	}
 };
 
-headerCarousel.textContent = shuffledGerundios[currentIndex++]; // Start with the first item
+// Initialize the carousel with the first item
+headerCarousel.textContent = shuffledList[currentIndex++];
 
 window.addEventListener("load", viewportCheck);
 window.addEventListener("resize", viewportCheck);

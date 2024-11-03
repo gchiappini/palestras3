@@ -159,7 +159,7 @@ select {
 	}
 }
 
-@media (hover: hover) and (pointer: fine) {	/* ensure mouse state isn't triggered [mobile] */
+@media (hover: hover) and (pointer: fine) { /* Ensure mouse state isn't triggered on mobile */
 	.control:active {
 		transform: scale(0.95);
 	}

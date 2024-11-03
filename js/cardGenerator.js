@@ -148,7 +148,7 @@ function createLinkButton(date, eventLink, recordingLink) {
 }
 
 function styleEventByDate(cardRow, cardMain, date) {
-	const eventDate = new Date(date).setUTCHours(0, 0, 0, 0);
+	const eventDate = new Date(date + "T00:00:00Z");
 	const currentDate = new Date().setUTCHours(-3, 0, 0, 0);
 
 	if (eventDate < currentDate) {
@@ -169,7 +169,7 @@ function insertEventInOrder(container, newEvent, newEventDate) {
 
 	for (let i = events.length - 1; i >= 0; i--) {
 		const currentEvent = events[i];
-		const currentEventDate = new Date(currentEvent.querySelector("input[type='hidden']").value).setUTCHours(0, 0, 0, 0);
+		const currentEventDate = new Date(currentEvent.querySelector("input[type='hidden']").value + "T00:00:00Z");
 
 		if (newEventDate < currentEventDate) {
 			container.insertBefore(newEvent, currentEvent.nextSibling);

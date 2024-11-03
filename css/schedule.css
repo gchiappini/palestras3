@@ -1,15 +1,20 @@
+:root {
+	--row-gap: 2rem;
+	--summ-height: 3; /* Unitless */
+}
+
 main {
 	display: grid;
 	grid-template-areas:
-		"header"		/* css/base */
+		"header" /* CSS/base */
 		"filter"
 		"events"
-		"pages";		/* css/base */
+		"pages"; /* CSS/base */
 	grid-template-rows:
 		min(70vw, 35rem)
-		calc(var(--space-md) + 25px)	/* added its own height */
+		calc(var(--row-gap) + 25px) /* Added its own height */
 		1fr
-		var(--space-xxl);
+		calc(var(--row-gap) * 5);
 	grid-auto-columns: minmax(0, min(90ch, 100vw - 4rem));
 	justify-content: center;
 }
@@ -33,7 +38,7 @@ main {
 	display: flex;
 	flex-direction: row;
 	position: absolute;
-	z-index: 1;			/* prevent overlapping by the card if current event */
+	z-index: 1; /* Prevent overlapping by the card if current event */
 	min-width: 8%;
 	padding: 2rem;
 	font-weight: bold;
@@ -112,7 +117,7 @@ main {
 	transition: transform 0.2s;
 }
 
-@media (hover: hover) and (pointer: fine) {	/* ensure mouse state isn't triggered [mobile] */
+@media (hover: hover) and (pointer: fine) { /* Ensure mouse state isn't triggered on mobile */
 	.card-button:hover {
 		background-color: lch(from var(--accent-light) calc(l - 20) c h);
 		color: white;
@@ -150,7 +155,7 @@ main {
 .summary-text {
 	display: -webkit-box;
 	-webkit-box-orient: vertical;
-	-webkit-line-clamp: 3;
+	-webkit-line-clamp: var(--summ-height);
 	line-height: calc(2px + 2ex + 2px);
 	overflow: hidden;
 	transition: -webkit-line-clamp 0.5s;
@@ -158,7 +163,7 @@ main {
 
 .summary-expand {
 	align-self: flex-end;
-	margin-bottom: 1rem;	/* set here so it's not added when the button is disabled */
+	margin-bottom: 1rem; /* Set here so it's not added when the button is disabled */
 	padding: 1rem;
 	font-size: 1.2rem;
 
@@ -172,7 +177,7 @@ main {
 	flex-flow: row wrap;
 }
 
-.tag {	/* individual themes at css/tags */
+.tag { /* Individual themes at css/tags */
 	margin: 0.5rem 1rem;
 	padding: 0.5rem 1rem;
 	background: linear-gradient(var(--theme), color-mix(in srgb, var(--theme), black 70%));
@@ -212,7 +217,7 @@ main {
 }
 
 .finished-event :is(.tag, .portrait) {
-	--theme: gray;	/* workaround to mitigate color-mix() tint */
+	--theme: gray; /* Workaround to mitigate color-mix() tint */
 	filter: grayscale(100%);
 }
 
