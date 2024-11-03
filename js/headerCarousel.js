@@ -1,12 +1,11 @@
 // At large viewports, switch subheading from a list
 const headerCarousel = document.getElementById("carousel");
 const gerundios = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
-let currentIndex = 0;
 let intervalId = null;
 
 const switchText = () => {
-	currentIndex = (currentIndex + 1) % gerundios.length;
-	headerCarousel.textContent = gerundios[currentIndex];
+	const randomIndex = Math.floor(Math.random() * gerundios.length);
+	headerCarousel.textContent = gerundios[randomIndex];
 };
 
 const viewportCheck = () => {
@@ -20,6 +19,8 @@ const viewportCheck = () => {
 		headerCarousel.textContent = gerundios[0];
 	}
 };
+
+headerCarousel.textContent = gerundios[0];
 
 window.addEventListener("load", viewportCheck);
 window.addEventListener("resize", viewportCheck);

@@ -39,7 +39,7 @@ function generateEvent(container, date, title, summary, eventLink, recordingLink
 	cardRow.appendChild(cardMain);
 
 	// Insert event in container
-	insertEventInOrder(container, cardRow, new Date(date).setUTCHours(0, 0, 0, 0));
+	insertEventInOrder(container, cardRow, new Date(date + "T00:00:00Z"));
 }
 
 function createElementWithClasses(tag, ...classes) {
@@ -65,10 +65,14 @@ function createCardDate(date) {
 
 function appendAnimations(container) {
 	const animations = ["animRight", "animBottom", "animLeft", "animTop"];
+	const fragment = document.createDocumentFragment();
+
 	animations.forEach(anim => {
 		const span = createElementWithClasses("span", anim);
-		container.appendChild(span);
+		fragment.appendChild(span); // Minimize reflows by appending all spans to a temporary container first
 	});
+
+	container.appendChild(fragment);
 }
 
 function createCardTitle(title) {
@@ -108,13 +112,18 @@ function createTagDiv(tags, gerundio) {
 	return tagDiv;
 }
 
-// Set portrait image path by matching filename with guest name and surname extracted from the card summary
+// Set portrait image path by matching filename with the guest name and surname extracted from the card summary beginning
 // E.g. "John Doe, renowned professor at..." => Path must be "img/portrait/john_doe"
 // File extension must be .jpeg
 function createPortrait(summary) {
+
+	function removeDiacritics(str) { // Remove accents and other marks
+		return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+	}
+
 	const portrait = createElementWithClasses("div", "portrait");
 
-	const guestName = removeDiacritics(summary.split(/[ ,]/).slice(0, 2).join("_")).toLowerCase();
+	const guestName = removeDiacritics(summary.split(/\s+/).slice(0, 2).join("_")).toLowerCase();
 	portrait.style.backgroundImage = `url(img/portrait/${guestName}.jpeg)`;
 
 	return portrait;
@@ -122,7 +131,7 @@ function createPortrait(summary) {
 
 function createLinkButton(date, eventLink, recordingLink) {
 	const linkButton = document.createElement("a");
-	const eventDate = new Date(date).setUTCHours(0, 0, 0, 0);
+	const eventDate = new Date(date + "T00:00:00Z");
 	const currentDate = new Date().setUTCHours(-3, 0, 0, 0);
 
 	if (eventDate >= currentDate) {
@@ -136,10 +145,6 @@ function createLinkButton(date, eventLink, recordingLink) {
 	}
 
 	return linkButton;
-}
-
-function removeDiacritics(str) {
-	return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
 function styleEventByDate(cardRow, cardMain, date) {
