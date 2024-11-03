@@ -2,22 +2,24 @@
 const headerCarousel = document.getElementById("carousel");
 const list = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
 let intervalId = null;
-let shuffledList = shuffleArray([...list.slice(1)]); // Shuffle items except the first one
 let currentIndex = 0;
+let shuffledList; // Don't initialize yet
 
-const shuffleArray = (array) => {
+function shuffleArray(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[array[i], array[j]] = [array[j], array[i]]; // Swap elements
 	}
 	return array;
-};
+}
+
+shuffledList = shuffleArray([...list.slice(1)]); // Shuffle items except the starter
 
 const switchText = () => {
 	if (currentIndex === 0 && headerCarousel.textContent === "Acolher") {
 		currentIndex++;
 	}
-
+	
 	headerCarousel.textContent = shuffledList[currentIndex]; // Set to the current shuffled item
 	currentIndex = (currentIndex + 1) % shuffledList.length; // Increment index and wrap around
 };
