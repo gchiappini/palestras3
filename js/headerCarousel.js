@@ -35,7 +35,7 @@ const viewportCheck = () => {
 };
 
 // Initialize the carousel with the first item
-headerCarousel.textContent = shuffledList[currentIndex++];
+headerCarousel.textContent = shuffledList[0];
 
 window.addEventListener("load", viewportCheck);
 window.addEventListener("resize", viewportCheck);
