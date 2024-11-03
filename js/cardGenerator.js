@@ -76,7 +76,7 @@ function appendAnimations(container) {
 }
 
 function createCardTitle(title) {
-	const cardTitle = createElementWithClasses("h3", "card-title");
+	const cardTitle = createElementWithClasses("div", "card-title");
 	cardTitle.textContent = title;
 
 	return cardTitle;
@@ -95,7 +95,7 @@ function createCardSummary(summary) {
 
 	summaryExpand.onclick = function() {
 		summaryText.style.webkitLineClamp = "none";
-		summaryExpand.style.display = "none";
+		summaryExpand.style.visibility = "hidden";
 	}
 
 	return cardSummary;
