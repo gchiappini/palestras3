@@ -2,6 +2,7 @@
 const headerCarousel = document.getElementById("carousel");
 const list = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
 let intervalId = null;
+let shuffledList = shuffleArray([...list.slice(1)]); // Shuffle items except the first one
 let currentIndex = 0;
 
 const shuffleArray = (array) => {
@@ -12,13 +13,13 @@ const shuffleArray = (array) => {
 	return array;
 };
 
-let shuffledList = shuffleArray([...list]);
-
 const switchText = () => {
-	if (currentIndex === shuffledList.length) {
-		currentIndex = 0; // Reset index to start with the first item
+	if (currentIndex === 0 && headerCarousel.textContent === "Acolher") {
+		currentIndex++;
 	}
-	headerCarousel.textContent = shuffledList[currentIndex++];
+
+	headerCarousel.textContent = shuffledList[currentIndex]; // Set to the current shuffled item
+	currentIndex = (currentIndex + 1) % shuffledList.length; // Increment index and wrap around
 };
 
 const viewportCheck = () => {
@@ -29,13 +30,14 @@ const viewportCheck = () => {
 	} else {
 		clearInterval(intervalId);
 		intervalId = null;
-		headerCarousel.textContent = list[0]; // Reset to first item
-		currentIndex = 0; // Reset index for mobile view
+		// Reset to the first item for mobile view
+		headerCarousel.textContent = list[0];
+		currentIndex = 0;
 	}
 };
 
 // Initialize the carousel with the first item
-headerCarousel.textContent = shuffledList[0];
+headerCarousel.textContent = list[0];
 
 window.addEventListener("load", viewportCheck);
 window.addEventListener("resize", viewportCheck);
