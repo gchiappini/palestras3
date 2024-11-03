@@ -123,7 +123,7 @@ function createPortrait(summary) {
 
 	const portrait = createElementWithClasses("div", "portrait");
 
-	const guestName = removeDiacritics(summary.split(/\s+/).slice(0, 2).join("_")).toLowerCase();
+	const guestName = removeDiacritics(summary.split(/[\s,]+/).slice(0, 2).join("_")).toLowerCase();
 	portrait.style.backgroundImage = `url(img/portrait/${guestName}.jpeg)`;
 
 	return portrait;
