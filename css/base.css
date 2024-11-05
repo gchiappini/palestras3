@@ -47,30 +47,44 @@ body {
 	box-sizing: inherit;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0;
+}
+
 
 /* ---- Header ---- */
-.header {
+#header {
 	grid-area: header;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+
+	> .header-text {
+		color: cornflowerblue;
+		font-weight: bold;
+		font-size: clamp(5rem, 8vw + 2rem, 8rem);
+		font-family: Monoton, sans-serif;
+		text-align: center;
+		text-transform: uppercase;
+		text-shadow:
+			0 0 20px blue,
+			0 0 50px blue,
+			0 0 100px blue,
+			0 0 200px blue;
+		cursor: default;
+		animation: flicker 5s infinite alternate;
+	}
 }
 
-.header-text {
-	margin: 1rem 0;
-	color: cornflowerblue;
-	font-weight: bold;
-	font-size: clamp(5rem, 8vw + 2rem, 8rem);
-	font-family: Monoton, sans-serif;
-	text-align: center;
-	text-transform: uppercase;
-	text-shadow:
-		0 0 20px blue,
-		0 0 50px blue,
-		0 0 100px blue,
-		0 0 200px blue;
-	cursor: default;
-	animation: flicker 5s infinite alternate;
+@media (width >= 1024px) {
+	#carousel {
+		animation: swipeLeft 3s ease-out infinite;
+	}
 }
 
 @keyframes flicker {
@@ -82,35 +96,29 @@ body {
 	}
 }
 
-@media (width >= 1024px) {
-	#carousel {
-		animation: swipeLeft 3s ease-out infinite;
+@keyframes swipeLeft {
+	0%, 30%, 100% {
+		opacity: 1;
+		transform: translateX(0);
 	}
-
-	@keyframes swipeLeft {
-		0%, 30%, 100% {
-			opacity: 1;
-			transform: translateX(0);
-		}
-		14% {
-			opacity: 0;
-			transform: translateX(-20%);
-		}
-		15% {
-			opacity: 0;
-			transform: translateX(20%);
-		}
-		31% {
-			color: cornflowerblue;
-		}
-		32% {
-			color: gainsboro;
-			transform: scale(1.01);
-		}
-		50% {
-			color: cornflowerblue;
-			transform: scale(1);
-		}
+	14% {
+		opacity: 0;
+		transform: translateX(-20%);
+	}
+	15% {
+		opacity: 0;
+		transform: translateX(20%);
+	}
+	31% {
+		color: cornflowerblue;
+	}
+	32% {
+		color: gainsboro;
+		transform: scale(1.01);
+	}
+	50% {
+		color: cornflowerblue;
+		transform: scale(1);
 	}
 }
 
@@ -122,13 +130,13 @@ select {
 
 
 /* ---- Page controls ---- */
-.page-controls {
+#page-controls {
 	grid-area: pages;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	.control {
+	> .control {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -140,7 +148,7 @@ select {
 		border-radius: 100%;
 		cursor: pointer;
 
-		.arrow {
+		> .chevron {
 			position: absolute;
 			width: 12px;
 			height: 12px;
@@ -164,20 +172,22 @@ select {
 		transform: scale(0.95);
 	}
 
-	.control:hover > .previous {
-		animation: bounceLeft 1.4s linear infinite;
-	}
+	.control:hover {
+		> .previous {
+			animation: bounceLeft 1.4s linear infinite;
 
-	.control:hover > .previous.second {
-		animation: bounceLeft 1.4s 0.2s linear infinite;
-	}
+			&.second {
+				animation: bounceLeft 1.4s 0.2s linear infinite;
+			}
+		}
 
-	.control:hover > .next {
-		animation: bounceRight 1.4s linear infinite;
-	}
+		> .next {
+			animation: bounceRight 1.4s linear infinite;
 
-	.control:hover > .next.first {
-		animation: bounceRight 1.4s 0.2s linear infinite;
+			&.first {
+				animation: bounceRight 1.4s 0.2s linear infinite;
+			}
+		}
 	}
 
 	@keyframes bounceLeft {
@@ -221,7 +231,7 @@ select {
 
 
 /* ---- Background ---- */
-.bg {
+#bg {
 	display: none;
 
 	@media (width >= 1024px) {

@@ -76,7 +76,7 @@ function appendAnimations(container) {
 }
 
 function createCardTitle(title) {
-	const cardTitle = createElementWithClasses("div", "card-title");
+	const cardTitle = createElementWithClasses("h2", "card-title");
 	cardTitle.textContent = title;
 
 	return cardTitle;

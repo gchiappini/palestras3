@@ -19,7 +19,7 @@ main {
 	justify-content: center;
 }
 
-.filter-container {
+#filter-container {
 	grid-area: filter;
 	justify-self: end;
 }
@@ -42,7 +42,7 @@ main {
 	display: flex;
 	flex-direction: row;
 	position: absolute;
-	z-index: 1; /* Prevent overlap by the card if has .current-event */
+	z-index: 1; /* Prevent overlap by the card if current event */
 	min-width: 8%;
 	padding: 2rem;
 	font-weight: bold;
@@ -118,14 +118,16 @@ main {
 }
 
 @media (hover: hover) and (pointer: fine) { /* Ensure mouse state isn't triggered for mobile view */
-	.card-button:hover {
-		background-color: lch(from var(--accent-light) calc(l - 20) c h);
-		color: white;
-	}
+	.card-button {
+		&:hover {
+			background-color: lch(from var(--accent-light) calc(l - 20) c h);
+			color: white;
+		}
 
-	.card-button:active {
-		outline: 0;
-		transform: scale(0.95);
+		&:active {
+			outline: 0;
+			transform: scale(0.95);
+		}
 	}
 }
 
@@ -213,17 +215,21 @@ main {
 
 
 /* ---- Finished event ---- */
-.finished-event :is(.card-date, .card-info) * {
-	opacity: 0.5;
-}
+:where(.finished-event) {
+	.card-date *,
+	.card-info * {
+		opacity: 0.5;
+	}
 
-.finished-event :is(.tag, .portrait) {
-	--theme: gray; /* Workaround to mitigate color-mix() tint */
-	filter: grayscale(100%);
-}
+	.tag,
+	.portrait {
+		--theme: gray; /* Workaround to mitigate color-mix() tint */
+		filter: grayscale(100%);
+	}
 
-:where(.finished-event) .card-button {
-	background-color: #aaa;
+	.card-button {
+		background-color: #aaa;
+	}
 }
 
 
@@ -231,18 +237,42 @@ main {
 .current-event {
 	overflow: hidden;
 	transform: translate(0%);
-}
 
-.current-event > span {
-	position: absolute;
-}
+	> span {
+		position: absolute;
+	}
 
-.current-event > .animRight {
-	inset: 0 auto auto 0;
-	width: 100%;
-	height: 2px;
-	background: linear-gradient(to right, var(--accent-dark), var(--accent-light));
-	animation: animRight 2s linear infinite;
+	> .animRight {
+		inset: 0 auto auto 0;
+		width: 100%;
+		height: 2px;
+		background: linear-gradient(to right, var(--accent-dark), var(--accent-light));
+		animation: animRight 2s linear infinite;
+	}
+
+	> .animBottom {
+		inset: 0 0 auto auto;
+		width: 2px;
+		height: 100%;
+		background: linear-gradient(to bottom, var(--accent-dark), var(--accent-light));
+		animation: animBottom 2s linear 1s infinite;
+	}
+
+	> .animLeft {
+		inset: auto 0 0 auto;
+		width: 100%;
+		height: 2px;
+		background: linear-gradient(to left, var(--accent-dark), var(--accent-light));
+		animation: animLeft 2s linear infinite;
+	}
+
+	> .animTop {
+		inset: auto auto 0 0;
+		width: 2px;
+		height: 100%;
+		background: linear-gradient(to top, var(--accent-dark), var(--accent-light));
+		animation: animTop 2s linear 1s infinite;
+	}
 }
 
 @keyframes animRight {
@@ -254,14 +284,6 @@ main {
 	}
 }
 
-.current-event > .animBottom {
-	inset: 0 0 auto auto;
-	width: 2px;
-	height: 100%;
-	background: linear-gradient(to bottom, var(--accent-dark), var(--accent-light));
-	animation: animBottom 2s linear 1s infinite;
-}
-
 @keyframes animBottom {
 	from {
 		transform: translateY(-100%);
@@ -271,14 +293,6 @@ main {
 	}
 }
 
-.current-event > .animLeft {
-	inset: auto 0 0 auto;
-	width: 100%;
-	height: 2px;
-	background: linear-gradient(to left, var(--accent-dark), var(--accent-light));
-	animation: animLeft 2s linear infinite;
-}
-
 @keyframes animLeft {
 	from {
 		transform: translateX(100%);
@@ -286,14 +300,6 @@ main {
 	to {
 		transform: translateX(-100%);
 	}
-}
-
-.current-event > .animTop {
-	inset: auto auto 0 0;
-	width: 2px;
-	height: 100%;
-	background: linear-gradient(to top, var(--accent-dark), var(--accent-light));
-	animation: animTop 2s linear 1s infinite;
 }
 
 @keyframes animTop {
