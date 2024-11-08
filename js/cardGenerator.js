@@ -49,8 +49,14 @@ function createCardDate(date) {
 
 	// Extract day and month from date for card display
 	const [year, month, day] = date.split("-");
-	cardDate.appendChild(createElementWithClasses("div", "card-day").textContent = day);
-	cardDate.appendChild(createElementWithClasses("div", "card-month").textContent = month);
+
+	const dayElement = createElementWithClasses("div", "card-day");
+	dayElement.appendChild(document.createTextNode(day));
+	cardDate.appendChild(dayElement);
+
+	const monthElement = createElementWithClasses("div", "card-month");
+	monthElement.appendChild(document.createTextNode(month));
+	cardDate.appendChild(monthElement);
 
 	return cardDate;
 }
