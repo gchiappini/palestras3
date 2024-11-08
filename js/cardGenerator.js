@@ -47,16 +47,13 @@ function createElementWithClasses(tag, ...classes) {
 function createCardDate(date) {
 	const cardDate = createElementWithClasses("div", "card-date");
 
-	// Extract day and month from date for card display
-	const [year, month, day] = date.split("-");
+	const dateDay = createElementWithClasses("div", "card-day");
+	dateDay.textContent = date.split("-")[2];
+	cardDate.appendChild(dateDay);
 
-	const dayElement = createElementWithClasses("div", "card-day");
-	dayElement.textContent = day;
-	cardDate.appendChild(dayElement);
-
-	const monthElement = createElementWithClasses("div", "card-month");
-	monthElement.textContent = month;
-	cardDate.appendChild(monthElement);
+	const dateTextDiv = createElementWithClasses("div", "card-month");
+	dateTextDiv.textContent = date.split("-")[1];
+	cardDate.appendChild(dateTextDiv);
 
 	return cardDate;
 }
