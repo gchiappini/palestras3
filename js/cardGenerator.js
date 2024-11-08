@@ -132,7 +132,8 @@ function createPortrait(summary) {
 function createLinkButton(date, eventLink, recordingLink) {
 	const linkButton = document.createElement("a");
 	const eventDate = new Date(date + "T00:00:00Z");
-	const currentDate = new Date().setUTCHours(-3, 0, 0, 0);
+	const currentDate = new Date();
+	currentDate.setUTCHours(currentDate.getUTCHours() - 3, 0, 0, 0);
 
 	if (eventDate >= currentDate) {
 		linkButton.classList.add("card-button", "button-event");
@@ -149,11 +150,12 @@ function createLinkButton(date, eventLink, recordingLink) {
 
 function styleEventByDate(cardRow, cardMain, date) {
 	const eventDate = new Date(date + "T00:00:00Z");
-	const currentDate = new Date().setUTCHours(-3, 0, 0, 0);
+	const currentDate = new Date();
+	currentDate.setUTCHours(currentDate.getUTCHours() - 3, 0, 0, 0);
 
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
-	} else if (eventDate === currentDate) {
+	} else if (eventDate.getTime() === currentDate.getTime()) {
 		cardMain.classList.add("current-event");
 	}
 }

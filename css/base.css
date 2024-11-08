@@ -23,8 +23,10 @@
 }
 
 :root {
-	--accent-dark: #0c002b;
-	--accent-light: dodgerblue;
+	--dark: #0c002b;
+	--light: #1e90ff;
+	--header: #6495ed;
+	--grid-item: 50px;
 }
 
 html {
@@ -34,17 +36,10 @@ html {
 }
 
 body {
-	background: radial-gradient(ellipse at 50% 0%, navy 0%, black 66%);
-	color: white;
+	background: radial-gradient(ellipse at top, var(--dark) 0%, #000 66%);
+	color: #fff;
 	font-family: Rubik, system-ui, sans-serif;
-	font-weight: 400;
 	font-size: 1.6rem;
-}
-
-*,
-::before,
-::after {
-	box-sizing: inherit;
 }
 
 h1,
@@ -56,6 +51,10 @@ h6 {
 	margin: 0;
 }
 
+* {
+	box-sizing: inherit;
+}
+
 
 /* ---- Header ---- */
 #header {
@@ -65,7 +64,7 @@ h6 {
 	justify-content: center;
 
 	> .header-text {
-		color: cornflowerblue;
+		color: var(--header);
 		font-weight: bold;
 		font-size: clamp(5rem, 8vw + 2rem, 8rem);
 		font-family: Monoton, sans-serif;
@@ -78,12 +77,12 @@ h6 {
 			0 0 200px blue;
 		cursor: default;
 		animation: flicker 5s infinite alternate;
-	}
-}
 
-@media (width >= 1024px) {
-	#carousel {
-		animation: swipeLeft 3s ease-out infinite;
+		@media (width >= 1024px) {
+			&#carousel {
+				animation: swipeLeft 3s infinite;
+			}
+		}
 	}
 }
 
@@ -92,7 +91,7 @@ h6 {
 		opacity: 1;
 	}
 	45%, 99% {
-		opacity: 0.7;
+		opacity: .7;
 	}
 }
 
@@ -110,22 +109,16 @@ h6 {
 		transform: translateX(20%);
 	}
 	31% {
-		color: cornflowerblue;
+		color: var(--header);
 	}
 	32% {
-		color: gainsboro;
+		color: #ddd;
 		transform: scale(1.01);
 	}
 	50% {
-		color: cornflowerblue;
+		color: var(--header);
 		transform: scale(1);
 	}
-}
-
-
-/* ---- Filter ---- */
-select {
-	background-color: white;
 }
 
 
@@ -133,18 +126,16 @@ select {
 #page-controls {
 	grid-area: pages;
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	margin: auto;
 
 	> .control {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		position: relative;
 		width: 50px;
-		height: 50px;
+		height: var(--grid-item);
 		margin-inline: 1rem;
-		border: 2px solid white;
+		border: 3px solid white;
 		border-radius: 100%;
 		cursor: pointer;
 
@@ -167,9 +158,9 @@ select {
 	}
 }
 
-@media (hover: hover) and (pointer: fine) { /* Ensure mouse state isn't triggered for mobile view */
+@media (hover: hover) and (pointer: fine) { /* Ensure mouse states aren't triggered for mobile view */
 	.control:active {
-		transform: scale(0.95);
+		transform: scale(.95);
 	}
 
 	.control:hover {
@@ -177,7 +168,7 @@ select {
 			animation: bounceLeft 1.4s linear infinite;
 
 			&.second {
-				animation: bounceLeft 1.4s 0.2s linear infinite;
+				animation: bounceLeft 1.4s .2s linear infinite;
 			}
 		}
 
@@ -185,7 +176,7 @@ select {
 			animation: bounceRight 1.4s linear infinite;
 
 			&.first {
-				animation: bounceRight 1.4s 0.2s linear infinite;
+				animation: bounceRight 1.4s .2s linear infinite;
 			}
 		}
 	}
@@ -197,11 +188,11 @@ select {
 		}
 		25% {
 			opacity: 0;
-			transform: translateX(-10px) scale(-0.9);
+			transform: translateX(-10px) scale(-.9);
 		}
 		26% {
 			opacity: 0;
-			transform: translateX(10px) scale(-0.9);
+			transform: translateX(10px) scale(-.9);
 		}
 		55% {
 			opacity: 1;
@@ -216,11 +207,11 @@ select {
 		}
 		25% {
 			opacity: 0;
-			transform: translateX(10px) scale(0.9);
+			transform: translateX(10px) scale(.9);
 		}
 		26% {
 			opacity: 0;
-			transform: translateX(-10px) scale(0.9);
+			transform: translateX(-10px) scale(.9);
 		}
 		55% {
 			opacity: 1;
@@ -240,6 +231,6 @@ select {
 		inset: 0;
 		z-index: -1;
 		background: url(../img/theater.jpg) no-repeat center / cover;
-		opacity: 0.3;
+		opacity: .3;
 	}
 }
