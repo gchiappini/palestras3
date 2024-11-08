@@ -34,7 +34,7 @@ function generateEvent(container, date, title, summary, eventLink, recordingLink
 
 	// Append main content to row and insert event in container
 	cardRow.appendChild(cardMain);
-	insertEventInOrder(container, cardRow, new Date(date + "T00:00:00Z"));
+	insertEventInOrder(container, cardRow, new Date(date));
 }
 
 function createElementWithClasses(tag, ...classes) {
@@ -121,15 +121,17 @@ function createPortrait(summary) {
 	return portrait;
 }
 
-function adjustDateForTimezone(date, timezoneOffset = 0) {
-	const adjustedDate = new Date(date);
-	adjustedDate.setUTCHours(adjustedDate.getUTCHours() + timezoneOffset, 0, 0, 0);
-	return adjustedDate;
+function normalizeDate(date) {
+	const normalizedDate = new Date(date);
+	// Normalize to midnight (local time)
+	normalizedDate.setHours(0, 0, 0, 0);
+
+	return normalizedDate;
 }
 
 function createLinkButton(date, eventLink, recordingLink) {
-	const eventDate = adjustDateForTimezone(new Date(date + "T00:00:00Z"));
-	const currentDate = adjustDateForTimezone(new Date(), -3); // Adjust for GMT-3
+	const eventDate = normalizeDate(date);
+	const currentDate = normalizeDate(new Date());
 
 	const linkButton = document.createElement("a");
 	const isEventUpcoming = eventDate >= currentDate;
@@ -142,8 +144,8 @@ function createLinkButton(date, eventLink, recordingLink) {
 }
 
 function styleEventByDate(cardRow, cardMain, date) {
-	const eventDate = adjustDateForTimezone(new Date(date + "T00:00:00Z"));
-	const currentDate = adjustDateForTimezone(new Date(), -3); // Adjust for GMT-3
+	const eventDate = normalizeDate(date);
+	const currentDate = normalizeDate(new Date());
 
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
@@ -163,7 +165,7 @@ function insertEventInOrder(container, newEvent, newEventDate) {
 
 	for (let i = events.length - 1; i >= 0; i--) {
 		const currentEvent = events[i];
-		const currentEventDate = new Date(currentEvent.querySelector("input[type='hidden']").value + "T00:00:00Z");
+		const currentEventDate = new Date(currentEvent.querySelector("input[type='hidden']").value);
 
 		if (newEventDate < currentEventDate) {
 			container.insertBefore(newEvent, currentEvent.nextSibling);
