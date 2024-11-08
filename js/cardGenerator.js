@@ -32,7 +32,8 @@ function generateEvent(container, date, title, summary, eventLink, recordingLink
 	// Add event class by date
 	styleEventByDate(cardRow, cardMain, date);
 
-	// Append main content to row and insert event in container
+	// Append content to row and insert event in container
+	cardRow.appendChild(cardDate);
 	cardRow.appendChild(cardMain);
 	insertEventInOrder(container, cardRow, new Date(date));
 }
@@ -47,13 +48,16 @@ function createElementWithClasses(tag, ...classes) {
 function createCardDate(date) {
 	const cardDate = createElementWithClasses("div", "card-date");
 
-	const dateDay = createElementWithClasses("div", "card-day");
-	dateDay.textContent = date.split("-")[2];
-	cardDate.appendChild(dateDay);
+	// Extract day and month from date for card display
+	const [year, month, day] = date.split("-");
 
-	const dateTextDiv = createElementWithClasses("div", "card-month");
-	dateTextDiv.textContent = date.split("-")[1];
-	cardDate.appendChild(dateTextDiv);
+	const dayElement = createElementWithClasses("div", "card-day");
+	dayElement.textContent = day;
+	cardDate.appendChild(dayElement);
+
+	const monthElement = createElementWithClasses("div", "card-month");
+	monthElement.textContent = month;
+	cardDate.appendChild(monthElement);
 
 	return cardDate;
 }
