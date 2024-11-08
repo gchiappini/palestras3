@@ -11,11 +11,8 @@ function generateEvent(container, date, title, summary, eventLink, recordingLink
 	hiddenDate.value = date;
 	cardRow.appendChild(hiddenDate);
 
-	// Card date
+	// Card date and card main content
 	const cardDate = createCardDate(date);
-	cardRow.appendChild(cardDate);
-
-	// Card main content
 	const cardMain = createElementWithClasses("div", "card-main");
 	appendAnimations(cardMain);
 
@@ -35,10 +32,8 @@ function generateEvent(container, date, title, summary, eventLink, recordingLink
 	// Add event class by date
 	styleEventByDate(cardRow, cardMain, date);
 
-	// Append main content to row
+	// Append main content to row and insert event in container
 	cardRow.appendChild(cardMain);
-
-	// Insert event in container
 	insertEventInOrder(container, cardRow, new Date(date + "T00:00:00Z"));
 }
 
@@ -52,26 +47,20 @@ function createElementWithClasses(tag, ...classes) {
 function createCardDate(date) {
 	const cardDate = createElementWithClasses("div", "card-date");
 
-	const dateDay = createElementWithClasses("div", "card-day");
-	dateDay.textContent = date.split("-")[2];
-	cardDate.appendChild(dateDay);
-
-	const dateTextDiv = createElementWithClasses("div", "card-month");
-	dateTextDiv.textContent = date.split("-")[1];
-	cardDate.appendChild(dateTextDiv);
+	// Extract day and month from date for card display
+	const [year, month, day] = date.split("-");
+	cardDate.appendChild(createElementWithClasses("div", "card-day").textContent = day);
+	cardDate.appendChild(createElementWithClasses("div", "card-month").textContent = month);
 
 	return cardDate;
 }
 
 function appendAnimations(container) {
-	const animations = ["animRight", "animBottom", "animLeft", "animTop"];
 	const fragment = document.createDocumentFragment();
-
-	animations.forEach(anim => {
-		const span = createElementWithClasses("span", anim);
-		fragment.appendChild(span); // Minimize reflows by appending all spans to a temporary container first
+	["animRight", "animBottom", "animLeft", "animTop"].forEach(anim => {
+		// Minimize reflows by appending all spans to a temporary container first
+		fragment.appendChild(createElementWithClasses("span", anim));
 	});
-
 	container.appendChild(fragment);
 }
 
@@ -84,19 +73,17 @@ function createCardTitle(title) {
 
 function createCardSummary(summary) {
 	const cardSummary = createElementWithClasses("div", "card-summary");
-
 	const summaryText = createElementWithClasses("p", "summary-text");
 	summaryText.textContent = summary;
-	cardSummary.appendChild(summaryText);
 
 	const summaryExpand = createElementWithClasses("button", "card-button", "summary-expand");
 	summaryExpand.textContent = "Ler mais";
-	cardSummary.appendChild(summaryExpand);
-
-	summaryExpand.onclick = function() {
+	summaryExpand.onclick = () => {
 		summaryText.style.webkitLineClamp = "none";
 		summaryExpand.style.visibility = "hidden";
-	}
+	};
+	cardSummary.appendChild(summaryText);
+	cardSummary.appendChild(summaryExpand);
 
 	return cardSummary;
 }
@@ -116,54 +103,45 @@ function createTagDiv(tags, gerundio) {
 // E.g. "John Doe, renowned professor at..." => Path must be "img/portrait/john_doe"
 // File extension must be .jpeg
 function createPortrait(summary) {
-
-	function removeDiacritics(str) { // Remove accents and other marks
+	// Remove accents from guest name
+	function removeDiacritics(str) {
 		return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 	}
 
 	const portrait = createElementWithClasses("div", "portrait");
-
 	const guestName = removeDiacritics(summary.split(/[\s,]+/).slice(0, 2).join("_")).toLowerCase();
 	portrait.style.backgroundImage = `url(img/portrait/${guestName}.jpeg)`;
 
 	return portrait;
 }
 
+function adjustDateForTimezone(date, timezoneOffset = 0) {
+	const adjustedDate = new Date(date);
+	adjustedDate.setUTCHours(adjustedDate.getUTCHours() + timezoneOffset, 0, 0, 0);
+	return adjustedDate;
+}
+
 function createLinkButton(date, eventLink, recordingLink) {
+	const eventDate = adjustDateForTimezone(new Date(date + "T00:00:00Z"));
+	const currentDate = adjustDateForTimezone(new Date(), -3); // Adjust for GMT-3
+
 	const linkButton = document.createElement("a");
-	// Parse the event date in UTC (midnight)
-	const eventDate = new Date(date + "T00:00:00Z");
-	// Normalize to midnight
-	eventDate.setUTCHours(0, 0, 0, 0);
+	const isEventUpcoming = eventDate >= currentDate;
 
-	// Get the current date and time, adjusted for local timezone
-	const currentDate = new Date();
-	currentDate.setUTCHours(currentDate.getUTCHours() - 3, 0, 0, 0);
-
-	if (eventDate >= currentDate) {
-		linkButton.classList.add("card-button", "button-event");
-		linkButton.href = eventLink;
-		linkButton.textContent = "Acessar";
-	} else {
-		linkButton.classList.add("card-button", "button-recording");
-		linkButton.href = recordingLink;
-		linkButton.textContent = "Gravação";
-	}
+	linkButton.classList.add("card-button", isEventUpcoming ? "button-event" : "button-recording");
+	linkButton.href = isEventUpcoming ? eventLink : recordingLink;
+	linkButton.textContent = isEventUpcoming ? "Acessar" : "Gravação";
 
 	return linkButton;
 }
 
 function styleEventByDate(cardRow, cardMain, date) {
-	const eventDate = new Date(date + "T00:00:00Z");
-	const currentDate = new Date();
-	currentDate.setUTCHours(currentDate.getUTCHours() - 3, 0, 0, 0);
+	const eventDate = adjustDateForTimezone(new Date(date + "T00:00:00Z"));
+	const currentDate = adjustDateForTimezone(new Date(), -3); // Adjust for GMT-3
 
-	const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
-	const currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-
-	if (eventDay < currentDay) {
+	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
-	} else if (eventDay.getTime() === currentDay.getTime()) {
+	} else if (eventDate.getTime() === currentDate.getTime()) {
 		cardMain.classList.add("current-event");
 	}
 }
@@ -192,59 +170,49 @@ function insertEventInOrder(container, newEvent, newEventDate) {
 }
 
 function populateComboBox(container) {
-	var events = container.querySelectorAll(".card-row");
-	var tagsSet = new Set();
-	var gerundioTagsSet = new Set();
+	const events = container.querySelectorAll(".card-row");
+	const tagsSet = new Set();
+	const gerundioTagsSet = new Set();
 
-	events.forEach(function(event) {
-		var tags = event.getAttribute("data-tags");
-		var gerundioTags = event.getAttribute("gerundio-tags");
+	events.forEach(event => {
+		const tags = event.getAttribute("data-tags");
+		const gerundioTags = event.getAttribute("gerundio-tags");
 
-		if (tags) {
-			tags.split(",").forEach(function(tag) {
-				tagsSet.add(tag.trim());
-			});
-		}
-
-		if (gerundioTags) {
-			gerundioTags.split(",").forEach(function(gerundioTag) {
-				gerundioTagsSet.add(gerundioTag.trim());
-			});
-		}
+		if (tags) tags.split(",").forEach(tag => tagsSet.add(tag.trim()));
+		if (gerundioTags) gerundioTags.split(",").forEach(tag => gerundioTagsSet.add(tag.trim()));
 	});
 
-	var combinedComboBox = document.getElementById("combined-filter");
+	// Populate combo box
+	const combinedComboBox = document.getElementById("combined-filter");
+	const tagsOptGroup = createOptGroup("Áreas", tagsSet);
+	const gerundioOptGroup = createOptGroup("Gerúndios", gerundioTagsSet);
 
-	var tagsOptGroup = document.createElement("optgroup");
-	tagsOptGroup.label = "Áreas";
-	tagsSet.forEach(function(tag) {
-		var option = document.createElement("option");
-		option.text = tag;
-		tagsOptGroup.appendChild(option);
-	});
-
-	var gerundioOptGroup = document.createElement("optgroup");
-	gerundioOptGroup.label = "Gerúndios";
-	gerundioTagsSet.forEach(function(gerundioTag) {
-		var option = document.createElement("option");
-		option.text = gerundioTag;
-		gerundioOptGroup.appendChild(option);
-	});
-
-	combinedComboBox.appendChild(gerundioOptGroup);
 	combinedComboBox.appendChild(tagsOptGroup);
+	combinedComboBox.appendChild(gerundioOptGroup);
+}
+
+function createOptGroup(label, tagsSet) {
+	const optGroup = document.createElement("optgroup");
+	optGroup.label = label;
+	tagsSet.forEach(tag => {
+		const option = document.createElement("option");
+		option.text = tag;
+		optGroup.appendChild(option);
+	});
+
+	return optGroup;
 }
 
 function filterEvents() {
-	var selectedValue = document.getElementById("combined-filter").value;
-	var events = document.querySelectorAll(".card");
+	const selectedValue = document.getElementById("combined-filter").value;
+	const events = document.querySelectorAll(".card");
 
-	events.forEach(function(event) {
-		var eventTags = event.getAttribute("data-tags").split(",");
-		var eventGerundioTags = event.getAttribute("gerundio-tags").split(",");
+	// Display events based on the selected filter
+	events.forEach(event => {
+		const eventTags = event.getAttribute("data-tags").split(",");
+		const eventGerundioTags = event.getAttribute("gerundio-tags").split(",");
 
-		var displayEvent = (eventTags.includes(selectedValue) || eventGerundioTags.includes(selectedValue) || selectedValue === "All");
-
+		const displayEvent = (eventTags.includes(selectedValue) || eventGerundioTags.includes(selectedValue) || selectedValue === "All");
 		event.style.display = displayEvent ? "flex" : "none";
 	});
 }
