@@ -51,11 +51,11 @@ function createCardDate(date) {
 	const [year, month, day] = date.split("-");
 
 	const dayElement = createElementWithClasses("div", "card-day");
-	dayElement.appendChild(document.createTextNode(day));
+	dayElement.textContent = day;
 	cardDate.appendChild(dayElement);
 
 	const monthElement = createElementWithClasses("div", "card-month");
-	monthElement.appendChild(document.createTextNode(month));
+	monthElement.textContent = month;
 	cardDate.appendChild(monthElement);
 
 	return cardDate;
