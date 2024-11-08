@@ -131,7 +131,12 @@ function createPortrait(summary) {
 
 function createLinkButton(date, eventLink, recordingLink) {
 	const linkButton = document.createElement("a");
+	// Parse the event date in UTC (midnight)
 	const eventDate = new Date(date + "T00:00:00Z");
+	// Normalize to midnight
+	eventDate.setUTCHours(0, 0, 0, 0);
+
+	// Get the current date and time, adjusted for local timezone
 	const currentDate = new Date();
 	currentDate.setUTCHours(currentDate.getUTCHours() - 3, 0, 0, 0);
 
@@ -153,9 +158,12 @@ function styleEventByDate(cardRow, cardMain, date) {
 	const currentDate = new Date();
 	currentDate.setUTCHours(currentDate.getUTCHours() - 3, 0, 0, 0);
 
-	if (eventDate < currentDate) {
+	const eventDay = new Date(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate());
+	const currentDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+
+	if (eventDay < currentDay) {
 		cardRow.classList.add("finished-event");
-	} else if (eventDate.getTime() === currentDate.getTime()) {
+	} else if (eventDay.getTime() === currentDay.getTime()) {
 		cardMain.classList.add("current-event");
 	}
 }
