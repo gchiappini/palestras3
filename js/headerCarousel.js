@@ -3,31 +3,41 @@ const headerCarousel = document.getElementById("carousel");
 const list = ["Acolher", "Codando", "Comunicando", "Cuidando", "Desembolando", "Endireitando", "Engenheirando", "Ensinando", "Negociando", "Projetando", "Veterinando"];
 let intervalId = null;
 let currentIndex = 0;
-let shuffledList; // Don't initialize yet
+let shuffledList;
 
 function shuffleArray(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
-		[array[i], array[j]] = [array[j], array[i]]; // Swap elements
+		// Swap elements
+		[array[i], array[j]] = [array[j], array[i]];
 	}
 	return array;
 }
 
-shuffledList = shuffleArray([...list.slice(1)]); // Shuffle items except the starter
+// Shuffle items except the starter
+shuffledList = shuffleArray([...list.slice(1)]);
 
 const switchText = () => {
 	if (currentIndex === 0 && headerCarousel.textContent === "Acolher") {
 		currentIndex++;
 	}
-	
-	headerCarousel.textContent = shuffledList[currentIndex]; // Set to the current shuffled item
-	currentIndex = (currentIndex + 1) % shuffledList.length; // Increment index and wrap around
+	// Set to the current shuffled item
+	headerCarousel.textContent = shuffledList[currentIndex];
+	// Increment index and wrap around
+	currentIndex = (currentIndex + 1) % shuffledList.length;
+};
+
+// Don't switch immediately on page load and sync with animation duration
+const startSwitchingText = () => {
+	setTimeout(() => {
+		intervalId = setInterval(switchText, 3000);
+	}, 3000);
 };
 
 const viewportCheck = () => {
 	if (window.innerWidth >= 800) {
 		if (!intervalId) {
-			intervalId = setInterval(switchText, 3000);
+			startSwitchingText();
 		}
 	} else {
 		clearInterval(intervalId);

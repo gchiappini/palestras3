@@ -123,7 +123,6 @@ function createPortrait(summary) {
 
 function normalizeDate(date) {
 	const normalizedDate = new Date(date);
-	// Normalize to midnight (local time)
 	normalizedDate.setHours(0, 0, 0, 0);
 
 	return normalizedDate;
