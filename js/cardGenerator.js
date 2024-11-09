@@ -125,9 +125,11 @@ function createPortrait(summary) {
 function normalizeDate(date) {
 	let normalizedDate = new Date(date);
 
-	// Append time part to ensure local time parsing
-	normalizedDate = new Date(date + "T00:00:00");
-
+	// Check if string without time component
+	if (typeof date === "string" && !date.includes("T")) {
+		// Append time part to ensure local time parsing
+		normalizedDate = new Date(date + "T00:00:00");
+	}
 	normalizedDate.setHours(0, 0, 0, 0);
 
 	return normalizedDate;
