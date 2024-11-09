@@ -135,10 +135,6 @@ function normalizeDate(date) {
 	// Set the time to midnight in the user's local timezone
 	normalizedDate.setHours(0, 0, 0, 0);
 
-console.log("Event Date:", eventDate);
-console.log("Current Date:", currentDate);
-
-
 	return normalizedDate;
 }
 
@@ -160,6 +156,10 @@ function createLinkButton(date, eventLink, recordingLink) {
 function styleEventByDate(cardRow, cardMain, date) {
 	const eventDate = normalizeDate(date);
 	const currentDate = normalizeDate(new Date());
+
+	// Log the normalized dates to check the local timezone values
+	console.log("Event Date:", eventDate);
+	console.log("Current Date:", currentDate);
 
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
