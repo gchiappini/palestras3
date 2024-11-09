@@ -123,17 +123,21 @@ function createPortrait(summary) {
 }
 
 function normalizeDate(date) {
-	// If the date is a string, create a new Date object
+	// Create the date object
 	let normalizedDate = new Date(date);
 
-	// Set the time to midnight in the user's local timezone (this avoids any UTC time interference)
-	normalizedDate.setHours(0, 0, 0, 0);
-	
-	// Ensure the date is in the local timezone by handling the offset manually
-	const localOffset = normalizedDate.getTimezoneOffset() * 60000; // getTimezoneOffset() returns minutes
-	normalizedDate = new Date(normalizedDate.getTime() - localOffset); // Adjust to local timezone
+	// If date is a string in format YYYY-MM-DD, make sure it's interpreted as local time
+	if (typeof date === 'string' && !isNaN(Date.parse(date))) {
+		// If it's a valid string, ensure it's being parsed as local time
+		normalizedDate = new Date(date + 'T00:00:00'); // Append the time part to ensure it's parsed in local time
+	}
 
-console.log("Normalized Date after fix:", normalizedDate);
+	// Set the time to midnight in the user's local timezone
+	normalizedDate.setHours(0, 0, 0, 0);
+
+console.log("Event Date:", eventDate);
+console.log("Current Date:", currentDate);
+
 
 	return normalizedDate;
 }
