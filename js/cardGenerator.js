@@ -133,6 +133,8 @@ function normalizeDate(date) {
 	const localOffset = normalizedDate.getTimezoneOffset() * 60000; // getTimezoneOffset() returns minutes
 	normalizedDate = new Date(normalizedDate.getTime() - localOffset); // Adjust to local timezone
 
+console.log("Normalized Date after fix:", normalizedDate);
+
 	return normalizedDate;
 }
 
@@ -154,10 +156,6 @@ function createLinkButton(date, eventLink, recordingLink) {
 function styleEventByDate(cardRow, cardMain, date) {
 	const eventDate = normalizeDate(date);
 	const currentDate = normalizeDate(new Date());
-
-console.log("Event Date:", eventDate);
-console.log("Current Date:", currentDate);
-
 
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
