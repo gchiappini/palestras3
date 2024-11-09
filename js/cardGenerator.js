@@ -48,7 +48,7 @@ function createElementWithClasses(tag, ...classes) {
 function createCardDate(date) {
 	const cardDate = createElementWithClasses("div", "card-date");
 
-	// Extract day and month from date for card display
+	// Extract day and month
 	const [year, month, day] = date.split("-");
 
 	const dayElement = createElementWithClasses("div", "card-day");
@@ -123,21 +123,14 @@ function createPortrait(summary) {
 }
 
 function normalizeDate(date) {
-	// Create the date object
-	let normalizedDate = new Date(date);
+	// Append the time part to ensure local time parsing
+	let normalizedDate = new Date(date + 'T00:00:00');
 
-	// If date is a string in format YYYY-MM-DD, make sure it's interpreted as local time
-	if (typeof date === 'string' && !isNaN(Date.parse(date))) {
-		// If it's a valid string, ensure it's being parsed as local time
-		normalizedDate = new Date(date + 'T00:00:00'); // Append the time part to ensure it's parsed in local time
-	}
-
-	// Set the time to midnight in the user's local timezone
+	// Set the time to midnight
 	normalizedDate.setHours(0, 0, 0, 0);
 
 	return normalizedDate;
 }
-
 
 function createLinkButton(date, eventLink, recordingLink) {
 	const eventDate = normalizeDate(date);
@@ -157,9 +150,9 @@ function styleEventByDate(cardRow, cardMain, date) {
 	const eventDate = normalizeDate(date);
 	const currentDate = normalizeDate(new Date());
 
-	// Log the normalized dates to check the local timezone values
 	console.log("Event Date:", eventDate);
 	console.log("Current Date:", currentDate);
+
 
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
@@ -187,7 +180,6 @@ function insertEventInOrder(container, newEvent, newEventDate) {
 			return;
 		}
 	}
-
 	container.insertBefore(newEvent, container.firstChild);
 }
 
@@ -229,7 +221,7 @@ function filterEvents() {
 	const selectedValue = document.getElementById("combined-filter").value;
 	const events = document.querySelectorAll(".card");
 
-	// Display events based on the selected filter
+	// Display events based on selected filter
 	events.forEach(event => {
 		const eventTags = event.getAttribute("data-tags").split(",");
 		const eventGerundioTags = event.getAttribute("gerundio-tags").split(",");
