@@ -125,11 +125,9 @@ function createPortrait(summary) {
 function normalizeDate(date) {
 	let normalizedDate = new Date(date);
 
-	// Check if it's a string without a time component
-	if (typeof date === 'string' && !date.includes('T')) {
-		// Append the time part to ensure local time parsing
-		normalizedDate = new Date(date + 'T00:00:00');
-	}
+	// Append time part to ensure local time parsing
+	normalizedDate = new Date(date + "T00:00:00");
+
 	normalizedDate.setHours(0, 0, 0, 0);
 
 	return normalizedDate;
@@ -152,9 +150,6 @@ function createLinkButton(date, eventLink, recordingLink) {
 function styleEventByDate(cardRow, cardMain, date) {
 	const eventDate = normalizeDate(date);
 	const currentDate = normalizeDate(new Date());
-
-	console.log("Event Date:", eventDate);
-	console.log("Current Date:", currentDate);
 
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
