@@ -147,6 +147,10 @@ function styleEventByDate(cardRow, cardMain, date) {
 	const eventDate = normalizeDate(date);
 	const currentDate = normalizeDate(new Date());
 
+console.log("Event Date:", eventDate);
+console.log("Current Date:", currentDate);
+
+
 	if (eventDate < currentDate) {
 		cardRow.classList.add("finished-event");
 	} else if (eventDate.getTime() === currentDate.getTime()) {
