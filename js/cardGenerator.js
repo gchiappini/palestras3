@@ -123,11 +123,19 @@ function createPortrait(summary) {
 }
 
 function normalizeDate(date) {
-	const normalizedDate = new Date(date);
+	// If the date is a string, create a new Date object
+	let normalizedDate = new Date(date);
+
+	// Set the time to midnight in the user's local timezone (this avoids any UTC time interference)
 	normalizedDate.setHours(0, 0, 0, 0);
+	
+	// Ensure the date is in the local timezone by handling the offset manually
+	const localOffset = normalizedDate.getTimezoneOffset() * 60000; // getTimezoneOffset() returns minutes
+	normalizedDate = new Date(normalizedDate.getTime() - localOffset); // Adjust to local timezone
 
 	return normalizedDate;
 }
+
 
 function createLinkButton(date, eventLink, recordingLink) {
 	const eventDate = normalizeDate(date);
